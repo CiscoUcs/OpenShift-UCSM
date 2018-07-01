@@ -5,7 +5,7 @@ Please, refer to [Reference Architecture document](https://www.cisco.com/c/en/us
  for actual instructions.
 
 ### Clone the repository
-`git clone git@github.com:intel/openshift-container-architecture.git`
+`git clone https://github.com/CiscoUcs/OpenShift-UCSM.git`
 
 ### Creating inventory
 Inventory file has to be filled manually.
