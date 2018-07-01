@@ -10,7 +10,7 @@ This repos contains Ansible Playbook code for deploying RedHat OpenShift Contain
 5. This playbook is written for environment which works behind proxy, if proxy is not needed certain sub-tasks should be skipped.
 6. Inventory file and parameters defined in it are the final source to run these playbooks including RedHat provided OpenShift Container Platform deployment playbooks.
 
-Please, refer to [Reference Architecture document](https://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/ucs_openshift_design.html) & [Solution Deployment Guide]() for detail instructions and know-hows.
+Please, refer to [Solution Design & Reference Architecture document](https://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/ucs_openshift_design.html) & [Solution Deployment Guide]() for detail instructions and know-hows.
 
 ### Clone the repository
 `git clone https://github.com/CiscoUcs/OpenShift-UCSM.git`
