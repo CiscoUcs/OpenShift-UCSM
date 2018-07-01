@@ -1,4 +1,4 @@
-# OpenShift-UCSM - Deploying Red Hat OpenShift® Container Platform 3.9 with Container-Native Storage on Cisco UCS Managed Servers
+# Deploying Red Hat OpenShift® Container Platform 3.9 with Container-Native Storage on Cisco UCS Managed Servers
 
 ## Instructions
 This repos contains Ansible Playbook code for deploying RedHat OpenShift Containe Platform v3.9 on Cisco UCS bare metal servers. Following pre-requisites/important notes, are needed before the play-book can be played on -
