@@ -1,0 +1,124 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+local
+glusterfs
+
+[OSEv3:vars]
+## Baseline Configs
+ansible_ssh_user=root
+#ansible_become=true
+openshift_clock_enabled=true
+openshift_disable_check=docker_image_availability
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=ocp-cvd.local
+openshift_master_cluster_public_hostname=ocp-cvd.cisco.com
+openshift_master_default_subdomain=apps.ocp-cvd.cisco.com
+openshift_master_cluster_ip=100.100.100.70
+openshift_master_cluster_public_ip=10.65.122.63
+openshift_master_portal_net=172.25.0.0/16
+osm_cluster_network_cidr=172.28.0.0/14
+deployment_type=openshift-enterprise
+openshift_release=v3.9
+openshift_image_tag=v3.9.27
+openshift_deployment_type=openshift-enterprise
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/users.htpasswd'}]
+openshift_master_htpasswd_users={'admin': '$apr1$qrRCPRbu$JcZRzCFVV.Bk5TSEskUM8/'}
+
+## Custom Cisco/Intel UCS Configs
+rhel_subscription_user=<rhsm_user_name>
+rhel_subscription_pass=<password>
+local_dns=100.100.100.10
+external_dns=<dns-server-ip>
+external_interface=eno6
+external_netmask=255.255.255.0
+external_gateway=<external-gateway-ip>
+internal_interface=eno5
+internal_netmask=255.255.255.0
+bastion_ip=100.100.100.10
+internal_gateway={{ bastion_ip }}
+openshift_http_proxy=http://<proxy-server>:<port>/
+openshift_https_proxy=http://<proxy-server>:<port>/
+openshift_no_proxy=.cluster-local,.ocp-cvd.local,.ocp-cvd.domain-name.com,.apps.ocp-cvd.domain-name.com,100.100.100.70,100.100.100.50,100.100.100.51,100.100.100.52,100.100.100.53,100.100.100.54,100.100.100.55,100.100.100.56,100.100.100.57,100.100.100.58,100.100.100.59,100.100.100.60,100.100.100.61,100.100.100.62,100.100.100.63,127.0.0.1,100.100.100.10,127.0.0.0/8
+dhcp_first_ip=100.100.100.150
+dhcp_last_ip=100.100.100.200
+root_password=<root-password>
+
+## OCP Integrated Registry
+openshift_hosted_manage_registry=true
+openshift_hosted_registry_storage_kind=glusterfs
+openshift_hosted_registry_storage_volume_size=200Gi
+
+## CNS gluster-fuse single cluster
+openshift_master_dynamic_provisioning_enabled=True
+openshift_storage_glusterfs_namespace=storage
+openshift_storage_glusterfs_storageclass=true
+openshift_storage_glusterfs_storageclass_default=true
+openshift_storage_glusterfs_block_deploy=true
+openshift_storage_glusterfs_block_host_vol_create=true
+openshift_storage_glusterfs_block_host_vol_size=150
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_block_storageclass_default=false
+
+## Cluster Metrics
+#openshift_metrics_install_metrics=true
+#openshift_metrics_storage_kind=dynamic
+#openshift_metrics_storage_volume_size=25Gi
+#openshift_metrics_cassanda_pvc_storage_class_name=glusterfs-storage-block
+#openshift_metrics_hawkular_nodeselector={"region":"infra"}
+#openshift_metrics_cassandra_nodeselector={"region":"infra"}
+#openshift_metrics_heapster_nodeselector={"region":"infra"}
+
+## Cluster Logging
+#openshift_logging_install_logging=true
+#openshift_logging_es_pvc_dynamic=true
+#openshift_logging_es_pvc_size=50Gi
+#openshift_logging_es_pvc_storage_class_name=glusterfs-storage-block
+#openshift_logging_es_cluster_size=3
+#openshift_logging_es_nodeselector={"region":"infra"}
+#openshift_logging_kibana_nodeselector={"region":"infra"}
+#openshift_logging_curator_nodeselector={"region":"infra"}
+
+
+## Custom Cisco/Intel UCS Configs
+[local]
+127.0.0.1
+
+[masters]
+OCP-Mstr-1.ocp-cvd.local containerized=True openshift_ip=100.100.100.53 openshift_hostname=OCP-Mstr-1.ocp-cvd.local
+OCP-Mstr-2.ocp-cvd.local containerized=True openshift_ip=100.100.100.54 openshift_hostname=OCP-Mstr-2.ocp-cvd.local
+OCP-Mstr-3.ocp-cvd.local containerized=True openshift_ip=100.100.100.55 openshift_hostname=OCP-Mstr-3.ocp-cvd.local
+
+[nodes]
+OCP-Mstr-1.ocp-cvd.local openshift_ip=100.100.100.53 openshift_hostname=OCP-Mstr-1.ocp-cvd.local
+OCP-Mstr-2.ocp-cvd.local openshift_ip=100.100.100.54 openshift_hostname=OCP-Mstr-2.ocp-cvd.local
+OCP-Mstr-3.ocp-cvd.local openshift_ip=100.100.100.55 openshift_hostname=OCP-Mstr-3.ocp-cvd.local
+
+OCP-Infra-1.ocp-cvd.local openshift_node_labels="{'region': 'infra', 'node-role.kubernetes.io/infra': 'true'}" openshift_schedulable=True containerized=True openshift_public_ip=<external ip> openshift_ip=100.100.100.51 openshift_hostname=OCP-Infra-1.ocp-cvd.local
+OCP-Infra-2.ocp-cvd.local openshift_node_labels="{'region': 'infra', 'node-role.kubernetes.io/infra': 'true'}" openshift_schedulable=True containerized=True openshift_public_ip=<external ip> openshift_ip=100.100.100.52 openshift_hostname=OCP-Infra-2.ocp-cvd.local
+
+OCP-App-1.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.56 openshift_hostname=OCP-App-1.ocp-cvd.local
+OCP-App-2.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.57 openshift_hostname=OCP-App-2.ocp-cvd.local
+OCP-App-3.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.58 openshift_hostname=OCP-App-3.ocp-cvd.local
+OCP-App-4.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.59 openshift_hostname=OCP-App-4.ocp-cvd.local
+
+OCP-Strg-1.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.60 openshift_hostname=OCP-Strg-1.ocp-cvd.local
+OCP-Strg-2.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.61 openshift_hostname=OCP-Strg-2.ocp-cvd.local
+OCP-Strg-3.ocp-cvd.local containerized=True openshift_schedulable=True openshift_ip=100.100.100.62 openshift_hostname=OCP-Strg-3.ocp-cvd.local
+
+[etcd]
+etcd1.ocp-cvd.local containerized=True openshift_ip=100.100.100.53 openshift_hostname=etcd1.ocp-cvd.local
+etcd2.ocp-cvd.local containerized=True openshift_ip=100.100.100.54 openshift_hostname=etcd2.ocp-cvd.local
+etcd3.ocp-cvd.local containerized=True openshift_ip=100.100.100.55 openshift_hostname=etcd3.ocp-cvd.local
+
+[lb]
+lb1.ocp-cvd.local openshift_hostname=lb1.ocp-cvd.local openshift_ip=100.100.100.51 openshift_public_ip=<external ip>
+lb2.ocp-cvd.local openshift_hostname=lb2.ocp-cvd.local openshift_ip=100.100.100.52 openshift_public_ip=<external ip>
+
+[glusterfs]
+OCP-Strg-1.ocp-cvd.local glusterfs_devices="[ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd', '/dev/sde', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk', '/dev/sdl', '/dev/sdm', '/dev/sdn', '/dev/sdo', '/dev/sdp', '/dev/sdq', '/dev/sdr', '/dev/sds', '/dev/sdt' ]"
+OCP-Strg-2.ocp-cvd.local glusterfs_devices="[ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd', '/dev/sde', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk', '/dev/sdl', '/dev/sdm', '/dev/sdn', '/dev/sdo', '/dev/sdp', '/dev/sdq', '/dev/sdr', '/dev/sds', '/dev/sdt' ]"
+OCP-Strg-3.ocp-cvd.local glusterfs_devices="[ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd', '/dev/sde', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk', '/dev/sdl', '/dev/sdm', '/dev/sdn', '/dev/sdo', '/dev/sdp', '/dev/sdq', '/dev/sdr', '/dev/sds', '/dev/sdt' ]"

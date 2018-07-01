@@ -1,0 +1,18 @@
+- name: Copying chronyd configuration file
+  copy:
+    src=chrony.conf dest=/etc/chrony.conf
+
+- name: Chronyd.service re-start
+  service:
+    name: chronyd.service
+    state: restarted
+
+- name: Copying rhsm configuration file
+  copy:
+    src=rhsm.conf dest=/etc/rhsm/rhsm.conf
+
+- name: Copying ssh keys onto the infra nodes
+  shell:
+    ssh-copy-id
+  when:
+    inventory_hostname in groups['lb']
