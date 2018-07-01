@@ -13,26 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#- name: install required packages
-#  yum:
-#    name: "{{ item }}"
-#    state: present
-#  with_items:
-#    - "docker-python"
-#   - "ipxe-bootimgs"
-
 - name: Ensure docker is started
   systemd:
     name: docker
     enabled: yes
     state: started
-
-#- name: build nginx image
-#  docker_image: >
-#    name={{nginx_image}}
-#    tag={{ nginx_image_tag }}
-#    path={{playbook_dir}}/roles/deploy_bastion/files/nginx/
-#    state=present
 
 - name: build dnsmasq image
   docker_image: >
@@ -51,11 +36,6 @@
     src:  dnsmasq_container.service.j2
     dest: /etc/systemd/system/dnsmasq_container.service
 
-#- name: Create nginx systemd unit
-#  template:
-#    src:  nginx_container.service.j2
-#    dest: /etc/systemd/system/nginx_container.service
-
 - name: Create directory structure
   file:
     path: "{{ item }}"
@@ -67,12 +47,6 @@
 #- "/tftp/ipxe/serial"
 #- "/tftp/atomic/media"
 
-#- name: Copy undionly iPXE image
-#  copy:
-#    src: /usr/share/ipxe/ipxe.efi
-#    dest: /tftp/ipxe/ipxe.efi
-#    mode: 0644
-
 - name: Create reboot script
   template:
     src:  reboot.sh
@@ -81,20 +55,8 @@
 - name: Make reboot.sh executable
   file: dest=/tftp/reboot.sh mode=a+x
 
-#- name: Create ipxe main config systemd unit
-#  template:
-#    src:  main.ipxe.j2
-#    dest: /tftp/ipxe/main.ipxe
-
 - name: Set Selinux labels
   command: chcon -Rt svirt_sandbox_file_t /tftp
-
-#- name: Start and enable nginx_container service
-#  systemd:
-#    name: nginx_container.service
-#    state: started
-#    enabled: True
-#    daemon_reload: yes
 
 - name: Start dnsmasq_container service
   systemd:
