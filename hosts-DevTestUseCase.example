@@ -15,8 +15,8 @@ openshift_master_cluster_method=native
 openshift_master_cluster_hostname=ocp-c.local
 openshift_master_cluster_public_hostname=ocp-c.cisco.com
 openshift_master_default_subdomain=apps.ocp-c.cisco.com
-openshift_master_cluster_ip=201.201.201.70
-openshift_master_cluster_public_ip=10.65.121.123
+openshift_master_cluster_ip=<internal network VIP>
+openshift_master_cluster_public_ip=<external network VIP>
 openshift_master_portal_net=172.25.0.0/16
 osm_cluster_network_cidr=172.28.0.0/14
 deployment_type=openshift-enterprise
@@ -28,23 +28,23 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_master_htpasswd_users={'admin': '$apr1$nwZoRtu7$IkKGbUTdxT/dHcX5Sg3yd1'}
 
 ## Custom Cisco/Intel UCS Configs
-rhel_subscription_user=sisudhir@cisco.com
-rhel_subscription_pass=qwerty123
-local_dns=201.201.201.10
-external_dns=171.70.168.183
+rhel_subscription_user=<rhsm_user_name>
+rhel_subscription_pass=<password>
+local_dns=<OpenShift DNS IP>
+external_dns=<External DNS IP>
 external_interface=eno6
 external_netmask=255.255.255.0
-external_gateway=10.65.121.1
+external_gateway=<external subnet gateway>
 internal_interface=eno5
 internal_netmask=255.255.255.0
-bastion_ip=201.201.201.10
+bastion_ip=<Bastion Node Internal IP>
 internal_gateway={{ bastion_ip }}
-openshift_http_proxy=http://64.102.255.40:8080/
-openshift_https_proxy=http://64.102.255.40:8080/
+openshift_http_proxy=http://<proxy server ip>:<port>/
+openshift_https_proxy=http://<proxy server ip>:<port>/
 openshift_no_proxy=.cluster-local,.ocp-c.local,.ocp-c.cisco.com,.apps.ocp-c.cisco.com,201.201.201.70,10.65.121.121,10.65.121.122,10.65.121.123,201.201.201.51,201.201.201.52,201.201.201.53,201.201.201.54,201.201.201.55,201.201.201.56,201.201.201.57,201.201.201.58,127.0.0.1,201.201.201.10,127.0.0.0/8
 dhcp_first_ip=201.201.201.150
 dhcp_last_ip=201.201.201.200
-root_password=Nbv12345!
+root_password=<password>
 
 ## OCP Integrated Registry
 openshift_hosted_manage_registry=true
