@@ -19,7 +19,6 @@
     - check_ansible_version
     - rhel_unsubscribe
     - rhel_subscribe
-#    - openshift_remote_access_master
     - openshift_dns
     - known_hosts
   post_tasks:
@@ -33,7 +32,6 @@
   vars:
     ansible_ssh_user: root
   roles:
-#    - openshift_remote_access_slaves
     - common
     - rhel_unsubscribe
     - rhel_subscribe
