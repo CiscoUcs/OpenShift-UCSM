@@ -6,6 +6,16 @@ lb
 local
 glusterfs
 
+[all:vars]
+ansible_connection=local
+username=<n9k user>
+password=<password>
+
+## Nexus Configs
+[Nexus]
+n9ka nexus_hosts=<ip> source=<ip> destination=<ip>
+n9kb nexus_hosts=<ip> source=<ip> destination=<ip>
+
 [OSEv3:vars]
 ## Baseline Configs
 ansible_ssh_user=root
