@@ -1,0 +1,10 @@
+# Create Global VPC Parameters
+- name: Configuring vpc Domain, Peer-link and Global Parameters
+  nxos_vpc:
+    provider: "{{ provider_nxapi }}"
+    domain: 10
+    pkl_src: "{{ source }}"
+    pkl_dest: "{{ destination }}"
+    peer_gw: true
+    auto_recovery: true
+    state: present

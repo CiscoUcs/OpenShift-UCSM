@@ -1,0 +1,8 @@
+provider_nxapi:
+  host: "{{ nexus_hosts }}"
+  username: "{{ username }}"
+  password: "{{ password }}"
+  transport: nxapi
+  use_ssl: yes
+  validate_certs: no
+  port: 443

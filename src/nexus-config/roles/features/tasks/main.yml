@@ -1,0 +1,11 @@
+# Enable Features
+- name: Enable NXAPI access with default configuration
+  nxos_nxapi:
+    provider: "{{ provider_ssh }}"
+    state: present
+- name: Enabling NXOS Features
+  nxos_feature:
+    provider: "{{ provider_nxapi }}"
+    feature: "{{ item }}"
+    state: enabled
+  with_items: "{{ enabled_features }}" 

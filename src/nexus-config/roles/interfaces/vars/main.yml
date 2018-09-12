@@ -1,0 +1,27 @@
+provider_nxapi:
+  host: "{{ nexus_hosts }}"
+  username: "{{ username }}"
+  password: "{{ password }}"
+  transport: nxapi
+  use_ssl: yes
+  validate_certs: no
+  port: 443
+vpc_peerlink1: "Ethernet1/9"
+vpc_peerlink2: "Ethernet1/10"
+po_Docker_FI_A: "12"
+po_Docker_FI_B: "13"
+po_Nimble_FI_A: "14"
+po_Nimble_FI_B: "15"
+docker_FI_A_Link: "Ethernet2/1"
+docker_FI_B_Link: "Ethernet2/2"
+nimble_FI_A_Link: "Ethernet2/3"
+nimble_FI_B_Link: "Ethernet2/4"
+svi1: "Vlan1001"
+svi1_ip: "100.100.100.254"
+svi2: "Vlan1002"
+svi2_ip: "101.101.101.254"
+svi3: "Vlan2001"
+svi3_ip: "201.201.201.254"
+svi4: "Vlan2002"
+svi4_ip: "202.202.202.254"
+svi_mask: "24"

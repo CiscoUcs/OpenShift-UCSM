@@ -1,0 +1,13 @@
+provider_nxapi:
+  host: "{{ nexus_hosts }}"
+  username: "{{ username }}"
+  password: "{{ password }}"
+  transport: nxapi
+  use_ssl: yes
+  validate_certs: no
+  port: 443
+vpc_po_peerlink: "11"
+po_Docker_FI_A: "12"
+po_Docker_FI_B: "13"
+po_Nimble_FI_A: "14"
+po_Nimble_FI_B: "15"

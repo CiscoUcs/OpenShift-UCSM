@@ -1,0 +1,130 @@
+## SVI Interface Configuration
+- name: Configuring VLAN Interface
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ svi1 }}"
+    - "{{ svi2 }}"
+    - "{{ svi3 }}"
+    - "{{ svi4 }}"
+## SVI Interface IP Configuration
+- name: Configuring IP for SVIs
+  nxos_ip_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ svi1 }}"
+    version: v4
+    addr: "{{ svi1_ip }}"
+    mask: "{{ svi_mask }}"
+    state: present
+- name: Configuring IP for SVIs
+  nxos_ip_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ svi2 }}"
+    version: v4
+    addr: "{{ svi2_ip }}"
+    mask: "{{ svi_mask }}"
+    state: present
+- name: Configuring IP for SVIs
+  nxos_ip_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ svi3 }}"
+    version: v4
+    addr: "{{ svi3_ip }}"
+    mask: "{{ svi_mask }}"
+    state: present
+- name: Configuring IP for SVIs
+  nxos_ip_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ svi4 }}"
+    version: v4
+    addr: "{{ svi4_ip }}"
+    mask: "{{ svi_mask }}"
+    state: present
+## vPC Peer-Link Configuration
+- name: Configuring vPC Peer-Link
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ vpc_peerlink1 }}"
+    state: present
+    mode: layer2
+- name: configure interfaces
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ vpc_peerlink2 }}"
+    state: present
+    mode: layer2
+## vPC Peer-Link port-channel
+- name: Configuring peer-link port-channel
+  nxos_portchannel:
+    provider: "{{ provider_nxapi }}"
+    group: "{{ vpc_po_peerlink }}"
+    mode: 'active'
+    force: 'true'
+    state: present
+    members:
+      - "{{ vpc_peerlink1 }}"
+      - "{{ vpc_peerlink2 }}"
+## Configuring Interfaces & Port-Channels for Docker FIs
+- name: Cofiguring L2 Interfaces Docker FI-A
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ docker_FI_A_Link }}"
+    state: present
+    mode: layer2
+- name: Configuring Port-Channel Docker FI-A
+  nxos_portchannel:
+    provider: "{{ provider_nxapi }}"
+    group: "{{ po_Docker_FI_A }}"
+    mode: 'active'
+    force: 'true'
+    state: present
+    members:
+      - "{{ docker_FI_A_Link }}"
+- name: Configuring L2 Interface Docker FI-B
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ docker_FI_B_Link }}"
+    state: present
+    mode: layer2
+- name: Configuring Port-Channel Docker FI-B
+  nxos_portchannel:
+    provider: "{{ provider_nxapi }}"
+    group: "{{ po_Docker_FI_B }}"
+    mode: 'active'
+    force: 'true'
+    state: present
+    members:
+      - "{{ docker_FI_B_Link }}"
+## Configuring Interfaces & Port-Channels for Nimble FIs
+- name: Cofiguring L2 Interfaces Nimble FI-A
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ nimble_FI_A_Link }}"
+    state: present
+    mode: layer2
+- name: Configuring Port-Channel Nimble FI-A
+  nxos_portchannel:
+    provider: "{{ provider_nxapi }}"
+    group: "{{ po_Nimble_FI_A }}"
+    mode: 'active'
+    force: 'true'
+    state: present
+    members:
+      - "{{ nimble_FI_A_Link }}"
+- name: Configuring L2 Interface Nimble FI-B
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: "{{ nimble_FI_B_Link }}"
+    state: present
+    mode: layer2
+- name: Configuring Port-Channel Nimble FI-B
+  nxos_portchannel:
+    provider: "{{ provider_nxapi }}"
+    group: "{{ po_Nimble_FI_B }}"
+    mode: 'active'
+    force: 'true'
+    state: present
+    members:
+      - "{{ nimble_FI_B_Link }}"

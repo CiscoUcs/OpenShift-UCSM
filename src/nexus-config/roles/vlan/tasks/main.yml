@@ -1,0 +1,9 @@
+# Create VLANS
+- name: Creating Vlans and assign names, using Vlan ID
+  nxos_vlan:
+    provider: "{{ provider_nxapi }}"
+    vlan_id: "{{ item.vlan_id }}"
+    admin_state: "{{ item.admin_state }}"
+    name: "{{ item.name }}"
+    state: present
+  with_items: "{{ vlans }}"

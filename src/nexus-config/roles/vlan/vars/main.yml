@@ -1,0 +1,39 @@
+provider_nxapi:
+  host: "{{ nexus_hosts }}"
+  username: "{{ username }}"
+  password: "{{ password }}"
+  transport: nxapi
+  use_ssl: yes
+  validate_certs: no
+  port: 443
+vlans:
+  - vlan_id: 121
+    name: VLAN0121
+    admin_state: up
+  - vlan_id: 602
+    name: VLAN0602
+    admin_state: up
+  - vlan_id: 603
+    name: VLAN0603
+    admin_state: up
+  - vlan_id: 604
+    name: VLAN0604
+    admin_state: up
+  - vlan_id: 613
+    name: VLAN0613
+    admin_state: up
+  - vlan_id: 614
+    name: VLAN0614
+    admin_state: up
+  - vlan_id: 1001
+    name: VLAN1001
+    admin_state: up
+  - vlan_id: 1002
+    name: VLAN1002
+    admin_state: up
+  - vlan_id: 2001
+    name: VLAN2001
+    admin_state: up
+  - vlan_id: 2002
+    name: VLAN2002
+    admin_state: up

@@ -1,0 +1,88 @@
+# Configuring Port-Channel for VPC peerlink
+- name: Configuring VPC Portchannel 
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ vpc_po_peerlink }}
+    state: present
+    mode: layer2
+- name: configuring vPC Peer Link
+  nxos_vpc_interface:
+    provider: "{{ provider_nxapi }}"
+    portchannel: "{{ vpc_po_peerlink }}"
+    peer_link: true
+- name: Set peerlink PO to switch mode trunk
+  nxos_switchport:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ vpc_po_peerlink }}
+    mode: 'trunk'
+    state: present
+# Configuring Port-Channel for Docker FIs
+- name: Configure Portchannel FI-A
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Docker_FI_A }}
+    state: present
+    mode: layer2
+- name: Configuring vPC UCSM FI-A
+  nxos_vpc_interface:
+    provider: "{{ provider_nxapi }}"
+    portchannel: "{{ po_Docker_FI_A }}"
+    vpc: "{{ po_Docker_FI_A }}"
+- name: Set FI PO to switch mode trunk
+  nxos_switchport:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Docker_FI_A }}
+    mode: 'trunk'
+    state: present
+- name: Configure Portchannel FI-B
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Docker_FI_B }}
+    state: present
+    mode: layer2
+- name: Configuring vPC UCSM FI-B
+  nxos_vpc_interface:
+    provider: "{{ provider_nxapi }}"
+    portchannel: "{{ po_Docker_FI_B }}"
+    vpc: "{{ po_Docker_FI_B }}"
+- name: Set FI PO to switch mode trunk
+  nxos_switchport:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Docker_FI_B }}
+    mode: 'trunk'
+    state: present
+# Configuring Port-Channel for Nimble FIs
+- name: Configure Portchannel FI-A
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Nimble_FI_A }}
+    state: present
+    mode: layer2
+- name: Configuring vPC UCSM FI-A
+  nxos_vpc_interface:
+    provider: "{{ provider_nxapi }}"
+    portchannel: "{{ po_Nimble_FI_A }}"
+    vpc: "{{ po_Nimble_FI_A }}"
+- name: Set FI PO to switch mode trunk
+  nxos_switchport:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Nimble_FI_A }}
+    mode: 'trunk'
+    state: present
+- name: Configure Portchannel FI-B
+  nxos_interface:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Nimble_FI_B }}
+    state: present
+    mode: layer2
+- name: Configuring vPC UCSM FI-B
+  nxos_vpc_interface:
+    provider: "{{ provider_nxapi }}"
+    portchannel: "{{ po_Nimble_FI_B }}"
+    vpc: "{{ po_Nimble_FI_B }}"
+- name: Set FI PO to switch mode trunk
+  nxos_switchport:
+    provider: "{{ provider_nxapi }}"
+    interface: port-channel{{ po_Nimble_FI_B }}
+    mode: 'trunk'
+    state: present

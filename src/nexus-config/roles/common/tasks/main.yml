@@ -1,0 +1,5 @@
+# Set NTP Server with parameters
+- nxos_ntp:
+    provider: "{{ provider_nxapi }}"
+    server: "{{ ntp_server }}"
+    prefer: enabled
