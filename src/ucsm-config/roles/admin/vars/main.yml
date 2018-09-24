@@ -1,0 +1,3 @@
+time_zone: "<time_zone>"
+ntp_server: <ntp_server_ip>
+dns_server: <dns_server_ip>

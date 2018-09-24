@@ -1,0 +1,130 @@
+#- name: Convert jbod to unconfigured-good in racks
+#  ucs_storage_local_disk_rack:
+#    hostname: "{{ucs_ip}}"
+#    username: "{{ucs_username}}"
+#    password: "{{ucs_password}}"
+#    rack_id: "{{rack_range}}"
+#    slot_id: "{{slot_id_rack}}"
+#    disk_id: "{{disk_range_rack}}"
+#    disk_state: "{{disk_state_rack}}"
+#
+#- name: Convert jbod to unconfigured-good in blades
+#  ucs_storage_local_disk_blade:
+#    hostname: "{{ucs_ip}}"
+#    username: "{{ucs_username}}"
+#    password: "{{ucs_password}}"
+#    chassis_id: "{{chassis_id}}"
+#    blade_id: "{{blade_range}}"
+#    slot_id: "{{slot_id_blade}}"
+#    disk_id: "{{disk_range_blade}}"
+#    disk_state: "{{disk_state_blade}}"
+
+- name: Create or delete storage profile Node
+  ucs_storage_profile:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{ strg_prof_name_1}}"
+- name: Create or delete storage profile Storage
+  ucs_storage_profile:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{ strg_prof_name_2}}"
+
+- name: Create or delete disk group policy Node
+  ucs_disk_group_policy:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{dg_name_1}}"
+    raid_level: "{{raid_level}}"
+    configuration_mode: "{{mode}}"
+    manual_disks:
+    - slot_num: "{{slot_num_3}}"
+      role: "{{role}}"
+    - slot_num: "{{slot_num_4}}"
+      role: "{{role}}"
+- name: Create or delete disk group policy Storage
+  ucs_disk_group_policy:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{dg_name_2}}"
+    raid_level: "{{raid_level}}"
+    configuration_mode: "{{mode}}"
+    manual_disks:
+    - slot_num: "{{slot_num_1}}"
+      role: "{{role}}"
+    - slot_num: "{{slot_num_2}}"
+      role: "{{role}}"
+
+#- name: Create or delete disk group policy
+#  ucs_disk_group_policy_auto:
+#    hostname: "{{ucs_ip}}"
+#    username: "{{ucs_username}}"
+#    password: "{{ucs_password}}"
+#    state: "{{state}}"
+#    name: "{{dg_name_1}}"
+#    num_drives: "{{drive_nums}}"
+#
+#- name: Create or delete disk group policy
+#  ucs_disk_group_policy_manual:
+#    hostname: "{{ucs_ip}}"
+#    username: "{{ucs_username}}"
+#    password: "{{ucs_password}}"
+#    state: "{{state}}"
+#    name: "{{dg_name_2}}"
+#    disk_list:
+#      - slot_num: "{{slot_num_1}}"
+#        role: "{{role}}"
+#      - slot_num: "{{slot_num_2}}"
+#        role: "{{role}}"
+
+- name: Create or delete boot lun Node
+  ucs_local_lun:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{lun_name_1}}"
+    size: "{{lun_size_1}}"
+    disk_policy_name: "{{dg_name_1}}"
+    sp_name: "{{strg_prof_name_1}}"
+
+- name: Create or delete docker lun Node
+  ucs_local_lun:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{lun_name_2}}"
+    size: "{{lun_size_2}}"
+    disk_policy_name: "{{dg_name_1}}"
+    sp_name: "{{strg_prof_name_1}}"
+
+- name: Create or delete boot lun Storage
+  ucs_local_lun:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{lun_name_1}}"
+    size: "{{lun_size_1}}"
+    disk_policy_name: "{{dg_name_2}}"
+    sp_name: "{{strg_prof_name_2}}"
+
+- name: Create or delete docker lun Storage
+  ucs_local_lun:
+    hostname: "{{ucs_ip}}"
+    username: "{{ucs_username}}"
+    password: "{{ucs_password}}"
+    state: "{{state}}"
+    name: "{{lun_name_2}}"
+    size: "{{lun_size_S}}"
+    disk_policy_name: "{{dg_name_2}}"
+    sp_name: "{{strg_prof_name_2}}"

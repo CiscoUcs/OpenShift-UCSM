@@ -1,0 +1,49 @@
+vlan_list:
+  - name: vLAN-614
+    id: '614'
+    native: 'no'
+    state: "present"
+  - name: vLAN-1001
+    id: '1001'
+    native: 'no'
+    state: "present"
+  - name: vLAN-1002
+    id: '1002'
+    native: 'no'
+    state: "present"
+
+switch_id_A: "A"
+switch_id_B: "B"
+port_id_1: "33"
+port_id_2: "34"
+slot_id: "1"
+
+mac_name: "OCP-Pool"
+first_addr: "00:25:B5:99:88:01"
+last_addr: "00:25:B5:99:89:F4"
+order: "sequential"
+
+ip_name: "ext-mgmt"
+first_ip_addr_1: "<first_ip_add_block1>"
+last_ip_addr_1: "<last_ip_add_block1>"
+subnet_mask: "<subnetmask>"
+default_gw: "<gateway_ip>"
+
+first_ip_addr_2: "<first_ip_add_block2>"
+last_ip_addr_2: "<last_ip_add_block2>"
+
+vnic_A_B: A-B
+vnic_B_A: B-A
+vnic_name1: eno5
+vlans_list1:
+  - name: vLAN-1001 
+    native: 'yes'
+    state: present
+  - name: vLAN-1002
+    native: 'no'
+    state: present
+vnic_name2: eno6
+vlans_list2:
+  - name: vLAN-614
+    native: 'yes'
+    state: present

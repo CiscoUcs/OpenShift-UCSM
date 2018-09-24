@@ -1,0 +1,27 @@
+#rack_range: 1, 2
+#slot_id_rack: "1"
+#disk_range_rack: 1, 2
+#disk_state_rack: unconfigured-good
+#chassis_id: 2
+#blade_range: 1, 2
+#slot_id_blade: "1"
+#disk_range_blade: 1, 2
+#disk_state_blade: unconfigured-good
+strg_prof_name_1: "OCP_Node"
+strg_prof_name_2: "OCP_Glstr"
+dg_name_1: "OCP_Node_Boot"
+dg_name_2: "OCP_Glstr_Boot"
+state: "present"
+raid_level: "mirror"
+drive_nums: "2"
+mode: "manual"
+slot_num_1: "25"
+slot_num_2: "26"
+slot_num_3: "1"
+slot_num_4: "2"
+role: "normal"
+lun_name_1: "Boot_LUN"
+lun_size_1: "30"
+lun_name_2: "Docker_LUN"
+lun_size_2: "200"
+lun_size_S: "170"

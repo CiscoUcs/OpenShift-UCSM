@@ -1,0 +1,47 @@
+- name: Add Chassis Discovery Policy
+  ucs_compute_chassis_discovery_policy:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ policy_name }}" 
+    action: "{{ policy_action }}"
+    link_aggregation_pref: "{{ link_aggregation_pref }}"
+    state: "present"
+
+- name:
+  ucs_compute_psu_policy:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    redundancy: "{{ redundancy }}"
+    #state: "present"
+
+- name: Configure Ports for FI id A
+  ucs_fabric_interconnect_ports:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ port_name }}" 
+    id: "{{ FI_id_A }}" 
+    state: "present"
+    ether_ports_list:
+      - name: "{{ item.name }}"
+        port_id: "{{ item.port_id }}" 
+        slot_id: "{{ item.slot_id }}" 
+        port_type: "{{ item.port_type }}" 
+  with_items: "{{ ether_ports }}"
+
+- name: Configure Ports for FI id B 
+  ucs_fabric_interconnect_ports:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ port_name }}"
+    id: "{{ FI_id_B }}"
+    state: "present"
+    ether_ports_list:
+      - name: "{{ item.name }}"
+        port_id: "{{ item.port_id }}"
+        slot_id: "{{ item.slot_id }}"
+        port_type: "{{ item.port_type }}"
+  with_items: "{{ ether_ports }}"

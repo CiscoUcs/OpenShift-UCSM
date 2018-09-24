@@ -1,0 +1,93 @@
+- name: Configure VLAN
+  ucs_vlans:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ item.name }}" 
+    id: "{{ item.id }}"  
+    native: "{{ item.native }}" 
+    state: "{{ item.state }}"
+  with_list: "{{ vlan_list }}"
+
+
+- name: Configure Port Channel FI-A
+  ucs_fabric_eth_lan_pc:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "" 
+    switch_id: "{{ switch_id_A }}"     
+    port_id: "12"
+    admin_speed: "40gbps" 
+    ports: 
+      - port_id: "{{ port_id_1 }}"
+        slot_id: "{{ slot_id }}"      
+      - port_id: "{{ port_id_2 }}"
+        slot_id: "{{ slot_id }}"      
+    state: present
+- name: Configure Port Channel FI-B
+  ucs_fabric_eth_lan_pc:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: ""
+    switch_id: "{{ switch_id_B }}"
+    port_id: "13"
+    admin_speed: "40gbps"
+    ports:
+      - port_id: "{{ port_id_1 }}"
+        slot_id: "{{ slot_id }}"
+      - port_id: "{{ port_id_2 }}"
+        slot_id: "{{ slot_id }}"
+    state: present
+
+- name: Configure MAC address pool
+  ucs_mac_pool:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ mac_name }}"    
+    first_addr: "{{ first_addr }}" 
+    last_addr: "{{ last_addr }}"
+    order: "{{ order }}"
+    state: present
+
+- name: Configure IPv4 address pools
+  ucs_ip_pool:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ ip_name }}"
+    ipv4_blocks:
+        - first_addr: "{{ first_ip_addr_1 }}"
+          last_addr: "{{ last_ip_addr_1 }}"
+          subnet_mask: "{{ subnet_mask }}"
+          default_gw: "{{ default_gw }}"
+        - first_addr: "{{ first_ip_addr_2 }}"
+          last_addr: "{{ last_ip_addr_2 }}"
+          subnet_mask: "{{ subnet_mask }}"
+          default_gw: "{{ default_gw }}"
+    state: "present"
+- name: Configure vNIC template with failover
+  ucs_vnic_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ vnic_name1 }}"
+    cdn_source: user-defined
+    cdn_name: "{{ vnic_name1 }}" 
+    fabric: "{{ vnic_A_B }}" 
+    vlans_list: "{{ vlans_list1 }}"
+    mac_pool: "{{ mac_name }}" 
+
+- name: Configure vNIC template with failover
+  ucs_vnic_template:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ vnic_name2 }}"
+    cdn_source: user-defined
+    cdn_name: "{{ vnic_name2 }}"
+    fabric: "{{ vnic_B_A }}"
+    vlans_list: "{{ vlans_list2 }}"
+    mac_pool: "{{ mac_name }}" 

@@ -1,0 +1,68 @@
+
+uuid_pool_name: "OCP_Pool"
+uuid_pool_first_entry: "0099-000000000001"
+uuid_pool_last_entry: "0099-000000000064"
+uuid_pool_order: "sequential"
+
+server_pool_name_1: "OCP_App_Pool"  
+server_pool_name_2: "OCP_Infra_Pool"  
+server_pool_name_3: "OCP_Mstr_Pool"  
+server_pool_name_4: "OCP_Strg_Pool"  
+
+host_firmware_packages:
+- name: "3.2.3d"
+  descr: ""
+  rack_bundle_version: "3.2(3d)C"
+  blade_bundle_version: "3.2(3d)B"
+  exclude_server_components:
+    - "local-disk"
+
+bios_policy: "OCP"
+
+ucs_boot_policies:
+- name: "OCP_vMedia"
+  description: "vMedia boot policy"
+  boot_mode: "legacy"
+  enforce_vnic_name: "yes"
+  reboot_on_update: "no"
+  boot_security: "no"
+  boot_order:
+    - order: 1
+      type: local_lun
+      params:
+        - lun_image:
+          type: primary
+          lun_name: Boot_LUN
+    - order: 2
+      type: cimc_mounted_dvd
+    - order: 3 
+      type: cimc_mounted_hdd
+
+lan_policy_1: "lan_policy_Infra"
+lan_policy_2: "lan_policy_Nodes"
+vnic_name_1: "eno5"
+vnic_name_2: "eno6"
+vnic_template_1: "eno5"
+vnic_template_2: "eno6"
+vnic_adapter_policy: "Linux"
+
+vmedia_policy_name: "OCP_Atomic"
+remote_ip: "<media_host_ip>"
+iso_file: "redhatAtomic-boot.iso"
+ks_file: "service-profile-name"
+
+service_profile_temp_A: "OCP_App_T"
+service_profile_name_A: "OCP-App"
+pool_name_A: "OCP_App_Pool"
+
+service_profile_temp_I: "OCP_Infra_T"
+service_profile_name_I: "OCP-Infra"
+pool_name_I: "OCP_Infra_Pool"
+
+service_profile_temp_M: "OCP_Mstr_T"
+service_profile_name_M: "OCP-Mstr"
+pool_name_M: "OCP_Mstr_Pool"
+
+service_profile_temp_S: "OCP_Strg_T"
+service_profile_name_S: "OCP-Strg"
+pool_name_S: "OCP_Strg_Pool"

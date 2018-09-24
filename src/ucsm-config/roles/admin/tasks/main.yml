@@ -1,0 +1,27 @@
+# Configure timezone
+- name: Configure timezone
+  ucs_timezone:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    state: present
+    admin_state: enabled
+    timezone: "{{ time_zone }}"
+    description: 'Time Zone Settings'
+# Configure ntp server
+- name: Configure ntp server
+  cisco_ucs_ntp:    
+    name: "{{ ntp_server }}" 
+    ucs_ip: "{{ ucs_ip }}" 
+    ucs_username: "{{ ucs_username }}" 
+    ucs_password: "{{ ucs_password }}" 
+    state: "present"
+# Confirgure dns server
+- name:
+  cisco_ucs_dns:
+    name: "{{ dns_server }}"
+    descr: ""
+    state: "present"
+    ucs_ip: "{{ ucs_ip }}"
+    ucs_username: "{{ ucs_username }}"
+    ucs_password: "{{ ucs_password }}"

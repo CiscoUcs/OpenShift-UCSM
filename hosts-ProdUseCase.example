@@ -10,6 +10,12 @@ glusterfs
 ansible_connection=local
 username=<n9k user>
 password=<password>
+ucs_username=<ucs admin-user>
+ucs_password=<ucs admin-password>
+
+## UCSM Configs
+[ucs]
+ucs1 ucs_ip=<ucsm vip>
 
 ## Nexus Configs
 [Nexus]

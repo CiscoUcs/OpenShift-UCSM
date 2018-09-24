@@ -1,0 +1,294 @@
+# Create UUID pool
+- name: Configure UUID address pool
+  ucs_uuid_pool:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    name: "{{ uuid_pool_name }}"
+    order: "{{ uuid_pool_order }}"
+    first_uuid: "{{ uuid_pool_first_entry }}" 
+    last_uuid: "{{ uuid_pool_last_entry }}"
+
+# Create server pool
+- name:
+  cisco_ucs_server_pool:
+    pool:
+      name: "{{ server_pool_name_1 }}"  
+      descr: ""
+      blades:
+        { "3/1", "4/1", "4/2", "5/2" }
+    ucs_ip: "{{ ucs_ip }}" 
+    ucs_username: "{{ ucs_username }}" 
+    ucs_password: "{{ ucs_password }}" 
+
+- name:
+  cisco_ucs_server_pool:
+    pool:
+      name: "{{ server_pool_name_2 }}"  
+      descr: ""
+      blades:
+        { "1/1", "1/2" }
+    ucs_ip: "{{ ucs_ip }}" 
+    ucs_username: "{{ ucs_username }}" 
+    ucs_password: "{{ ucs_password }}" 
+
+- name:
+  cisco_ucs_server_pool:
+    pool:
+      name: "{{ server_pool_name_3 }}"  
+      descr: ""
+      blades: 
+        { "2/1", "3/2", "2/2" } 
+    ucs_ip: "{{ ucs_ip }}" 
+    ucs_username: "{{ ucs_username }}" 
+    ucs_password: "{{ ucs_password }}" 
+
+- name:
+  cisco_ucs_server_pool:
+    pool:
+      name: "{{ server_pool_name_4 }}"  
+      descr: ""
+      servers: 
+        { 2, 3, 4 }
+    ucs_ip: "{{ ucs_ip }}" 
+    ucs_username: "{{ ucs_username }}" 
+    ucs_password: "{{ ucs_password }}" 
+
+# Create host firmware policy
+- name: UCS Host Firmware Packages
+  ucs_host_firmware_packages:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    state: "present" 
+    name: "{{ item.name }}" 
+    descr: "{{ item.descr }}"
+    rack_bundle_version: "{{ item.rack_bundle_version }}"
+    blade_bundle_version: "{{ item.blade_bundle_version }}"
+    exclude_server_components: "{{ item.exclude_server_components }}"
+  when: item.name is defined
+  with_items: "{{ host_firmware_packages }}"
+
+# Create vMedia policy
+- name: vmedia policy
+  ucs_vmedia_policy:
+    name: OCP_Atomic
+    description: ""
+    retry: yes
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    state: "present"    
+    mounts:
+    - name: bootMedia
+      description: ""
+      device : cdd
+      protocol: http
+      remote_ip: "{{ remote_ip }}" 
+      image_name_variable: none
+      file: "{{ iso_file }}" 
+      path: /
+    - name: installMedia
+      description: ""
+      device : hdd 
+      protocol: http
+      remote_ip: "{{ remote_ip }}" 
+      image_name_variable: "{{ ks_file }}" 
+      path: /
+
+# Create boot policy
+- name: UCS Boot Policies
+  ucs_boot_policy:
+    hostname: "{{ ucs_ip }}"
+    username: "{{ ucs_username }}"
+    password: "{{ ucs_password }}"
+    state: "present"
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    boot_mode: "{{ item.boot_mode }}"
+    enforce_vnic_name: "{{ item.enforce_vnic_name }}"
+    reboot_on_update: "{{ item.reboot_on_update }}"
+    boot_security: "{{ item.boot_security }}"
+    boot_order: "{{ item.boot_order }}"
+  when: item.name is defined
+  with_items: "{{ ucs_boot_policies }}"
+
+# Create lan-connectivity-policy using vnic template
+- name: Configure LAN Connectivity Policy - Infra
+  ucs_lan_connectivity:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}"
+    state: "present" 
+    name: "{{ lan_policy_1}}"  
+    vnic_list:
+    - name: "{{ vnic_name_1 }}" 
+      vnic_template: "{{ vnic_template_1 }}" 
+      adapter_policy: "{{ vnic_adapter_policy }}" 
+      order: "1"
+    - name: "{{ vnic_name_2 }}" 
+      vnic_template: "{{ vnic_template_2 }}"
+      adapter_policy: "{{ vnic_adapter_policy }}" 
+      order: "2"
+- name: Configure LAN Connectivity Policy - Nodes
+  ucs_lan_connectivity:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}"
+    state: "present" 
+    name: "{{ lan_policy_2}}"  
+    vnic_list:
+    - name: "{{ vnic_name_1 }}" 
+      vnic_template: "{{ vnic_template_1 }}" 
+      adapter_policy: "{{ vnic_adapter_policy }}" 
+
+# Create service profile template for App Nodes
+- name: Configure Service Profile Template App Node
+  ucs_service_profile_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ service_profile_temp_A }}"
+    bios_policy: "{{ bios_policy }}"
+    boot_policy: "OCP_vMedia" 
+    description: ""
+    host_firmware_package: "3.2.3d"
+    kvm_mgmt_policy: ""
+    lan_connectivity_policy: "{{ lan_policy_2 }}"
+    local_disk_policy: ""
+    mgmt_ip_pool: "ext-mgmt"
+    server_pool: "OCP_App_Pool"
+    server_pool_qualification: ""
+    storage_profile: "OCP_Node"
+    template_type: "updating-template"
+    uuid_pool: "{{ uuid_pool_name }}"
+    vmedia_policy: "{{ vmedia_policy_name }}"
+
+# Create service profile template for Infra Nodes
+- name: Configure Service Profile Template Infra Node
+  ucs_service_profile_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ service_profile_temp_I }}"
+    bios_policy: "{{ bios_policy }}"
+    boot_policy: "OCP_vMedia" 
+    description: ""
+    host_firmware_package: "3.2.3d"
+    kvm_mgmt_policy: ""
+    lan_connectivity_policy: "{{ lan_policy_1 }}"
+    local_disk_policy: ""
+    mgmt_ip_pool: "ext-mgmt"
+    server_pool: "OCP_Infra_Pool"
+    server_pool_qualification: ""
+    storage_profile: "OCP_Node"
+    template_type: "updating-template"
+    uuid_pool: "{{ uuid_pool_name }}"
+    vmedia_policy: "{{ vmedia_policy_name }}"
+
+# Create service profile template for Mstr Nodes
+- name: Configure Service Profile Template Mstr Node
+  ucs_service_profile_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ service_profile_temp_M }}"
+    bios_policy: "{{ bios_policy }}"
+    boot_policy: "OCP_vMedia" 
+    description: ""
+    host_firmware_package: "3.2.3d"
+    kvm_mgmt_policy: ""
+    lan_connectivity_policy: "{{ lan_policy_2 }}"
+    local_disk_policy: ""
+    mgmt_ip_pool: "ext-mgmt"
+    server_pool: "OCP_Mstr_Pool"
+    server_pool_qualification: ""
+    storage_profile: "OCP_Node"
+    template_type: "updating-template"
+    uuid_pool: "{{ uuid_pool_name }}"
+    vmedia_policy: "{{ vmedia_policy_name }}"
+
+# Create service profile template for Strg Nodes
+- name: Configure Service Profile Template Storage Node
+  ucs_service_profile_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    name: "{{ service_profile_temp_S }}"
+    bios_policy: "{{ bios_policy }}"
+    boot_policy: "OCP_vMedia" 
+    description: ""
+    host_firmware_package: "3.2.3d"
+    kvm_mgmt_policy: ""
+    lan_connectivity_policy: "{{ lan_policy_2 }}"
+    local_disk_policy: ""
+    mgmt_ip_pool: "ext-mgmt"
+    server_pool: "OCP_Strg_Pool"
+    server_pool_qualification: ""
+    storage_profile: "OCP_Glstr"
+    template_type: "updating-template"
+    uuid_pool: "{{ uuid_pool_name }}"
+    vmedia_policy: "{{ vmedia_policy_name }}"
+
+# Instantiate service profile from template
+- name: Configure Service Profile from Template App Node
+  ucs_service_profile_from_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    source_template: "{{ service_profile_temp_A }}"
+    name: "{{ item }}"
+  with_items: 
+    - "{{ service_profile_name_A }}-1"
+    - "{{ service_profile_name_A }}-2"
+    - "{{ service_profile_name_A }}-3"
+    - "{{ service_profile_name_A }}-4"
+
+# Instantiate service profile from template
+- name: Configure Service Profile from Template Infra Node
+  ucs_service_profile_from_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    source_template: "{{ service_profile_temp_I }}"
+    name: "{{ item }}"
+  with_items: 
+    - "{{ service_profile_name_I }}-1"
+    - "{{ service_profile_name_I }}-2"
+
+# Instantiate service profile from template
+- name: Configure Service Profile from Template Master Node
+  ucs_service_profile_from_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    source_template: "{{ service_profile_temp_M }}"
+    name: "{{ item }}"
+  with_items: 
+    - "{{ service_profile_name_M }}-1"
+    - "{{ service_profile_name_M }}-2"
+    - "{{ service_profile_name_M }}-3"
+
+# Instantiate service profile from template
+- name: Configure Service Profile from Template Storage Node
+  ucs_service_profile_from_template:
+    hostname: "{{ ucs_ip }}" 
+    username: "{{ ucs_username }}" 
+    password: "{{ ucs_password }}" 
+    source_template: "{{ service_profile_temp_S }}"
+    name: "{{ item }}"
+  with_items: 
+    - "{{ service_profile_name_S }}-1"
+    - "{{ service_profile_name_S }}-2"
+    - "{{ service_profile_name_S }}-3"
+
+# Associate service profile to server pool 
+#- name: Change Service Profile Association to server pool Container-Pool and restrict migration
+#  ucs_service_profile_association:
+#    hostname: "{{ ucs_ip }}"
+#    username: "{{ ucs_username }}"
+#    password: "{{ ucs_password }}"
+#    service_profile_name: "{{ service_profile_name_A }}"
+#    server_assignment: pool
+#    server_pool_name: "{{ pool_name_A }}"
+#    restrict_migration: 'yes'
